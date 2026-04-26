@@ -1,370 +1,207 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>.net bike</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=Sarabun:wght@300;400&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #f5f4f0;
-      --text: #111;
-      --muted: #888;
-      --card: #fff;
-      --border: #e0ddd6;
-      --hover: #f0ede6;
-      --black-bike: #1a1a1a;
-      --orange-bike: #f05a00;
-      --purple-bike: #6b21a8;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Sarabun', sans-serif;
-      font-weight: 300;
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 48px 16px 80px;
-    }
-
-    .container { width: 100%; max-width: 420px; }
-
-    /* Header */
-    .header {
-      text-align: center;
-      margin-bottom: 36px;
-      opacity: 0;
-      transform: translateY(16px);
-      animation: fadeUp 0.6s ease forwards;
-    }
-
-    .avatar {
-      width: 68px; height: 68px;
-      border-radius: 50%;
-      background: #1a1a1a;
-      margin: 0 auto 14px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .avatar svg { width: 34px; height: 34px; fill: var(--bg); }
-
-    .name {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 1.45rem;
-      letter-spacing: -0.02em;
-    }
-    .name span {
-      font-family: 'DM Mono', monospace;
-      font-weight: 400;
-      font-size: 0.8rem;
-      color: var(--muted);
-      display: block;
-      margin-top: 4px;
-    }
-    .bio { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-top: 8px; }
-
-    /* Section label */
-    .section-label {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 10px;
-      padding-left: 2px;
-      opacity: 0;
-      animation: fadeUp 0.5s ease forwards;
-    }
-
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 22px 0;
-      opacity: 0;
-      animation: fadeUp 0.5s ease forwards;
-    }
-
-    /* TikTok link card */
-    .links { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-
-    .link-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 13px 16px;
-      display: flex; align-items: center; gap: 12px;
-      text-decoration: none; color: var(--text);
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      opacity: 0; transform: translateY(10px);
-      animation: fadeUp 0.5s ease forwards;
-    }
-    .link-card:hover { background: var(--hover); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
-
-    .link-icon {
-      width: 36px; height: 36px;
-      border-radius: 8px;
-      background: #111;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: 1rem;
-    }
-    .link-icon.tiktok { background: #010101; }
-    .link-info { flex: 1; min-width: 0; }
-    .link-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; }
-    .link-sub { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-    .link-arrow { color: var(--muted); font-size: 0.85rem; flex-shrink: 0; }
-
-    /* Bike cards */
-    .bikes { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
-
-    .bike-card {
-      border-radius: 12px;
-      padding: 13px 16px;
-      display: flex; align-items: center; gap: 12px;
-      overflow: hidden;
-    }
-    .bike-card.black  { background: var(--black-bike);  color: #f5f4f0; }
-    .bike-card.orange { background: var(--orange-bike); color: #fff; }
-    .bike-card.purple { background: var(--purple-bike); color: #fff; }
-
-    .bike-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .bike-card.black  .bike-dot { background: #555; }
-    .bike-card.orange .bike-dot { background: rgba(255,255,255,0.45); }
-    .bike-card.purple .bike-dot { background: rgba(255,255,255,0.45); }
-
-    .bike-info { flex: 1; }
-    .bike-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem; }
-    .bike-desc { font-size: 0.7rem; opacity: 0.5; margin-top: 2px; }
-
-    .bike-svg { width: 32px; height: 32px; opacity: 0.12; flex-shrink: 0; fill: #fff; }
-
-    /* Tabs */
-    .tabs-wrap { margin-bottom: 12px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
-
-    .tabs {
-      display: flex; gap: 6px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 4px;
-    }
-
-    .tab-btn {
-      flex: 1; padding: 7px 4px;
-      border: none; background: transparent;
-      border-radius: 7px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.72rem;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      color: var(--muted);
-      display: flex; align-items: center; justify-content: center; gap: 4px;
-    }
-
-    .tab-btn .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-
-    .tab-btn[data-tab="black"]   .dot { background: #1a1a1a; }
-    .tab-btn[data-tab="orange"]  .dot { background: #f05a00; }
-    .tab-btn[data-tab="purple"]  .dot { background: #6b21a8; }
-    .tab-btn[data-tab="general"] .dot { background: #aaa; }
-
-    .tab-btn.active[data-tab="black"]   { background: var(--black-bike);  color: #f5f4f0; }
-    .tab-btn.active[data-tab="orange"]  { background: var(--orange-bike); color: #fff; }
-    .tab-btn.active[data-tab="purple"]  { background: var(--purple-bike); color: #fff; }
-    .tab-btn.active[data-tab="general"] { background: #444; color: #fff; }
-    .tab-btn.active .dot { opacity: 0.5; }
-
-    /* Affiliate panel */
-    .tab-panel { display: none; flex-direction: column; gap: 8px; }
-    .tab-panel.active { display: flex; }
-
-    .aff-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 12px 15px;
-      display: flex; align-items: center; gap: 11px;
-      text-decoration: none; color: var(--text);
-      transition: background 0.18s, transform 0.13s;
-    }
-    .aff-card:hover { background: var(--hover); transform: translateY(-1px); }
-
-    .aff-icon {
-      width: 34px; height: 34px;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; flex-shrink: 0;
-    }
-    .aff-icon.bi { background: var(--black-bike); }
-    .aff-icon.oi { background: var(--orange-bike); }
-    .aff-icon.pi { background: var(--purple-bike); }
-    .aff-icon.gi { background: #444; }
-    .aff-icon.sold { background: #ddd; }
-
-    .aff-info { flex: 1; min-width: 0; }
-    .aff-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .aff-sub { font-size: 0.68rem; color: var(--muted); margin-top: 1px; }
-    .aff-arrow { color: var(--muted); font-size: 0.8rem; flex-shrink: 0; }
-
-    .aff-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.56rem;
-      background: #ee4d2d;
-      color: #fff;
-      padding: 2px 6px;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-
-    .aff-card.sold-out { opacity: 0.4; pointer-events: none; }
-
-    /* Tags */
-    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
-    .tag { background: #111; color: #f5f4f0; font-family: 'DM Mono', monospace; font-size: 0.62rem; padding: 4px 10px; border-radius: 100px; }
-    .tag.outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-
-    /* Footer */
-    .footer { text-align: center; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--border); letter-spacing: 0.1em; opacity: 0; animation: fadeUp 0.5s ease forwards; }
-
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-    .header    { animation-delay: 0.00s; }
-    .sl1       { animation-delay: 0.12s; }
-    .link-card { animation-delay: 0.18s; }
-    .div1      { animation-delay: 0.24s; }
-    .sl2       { animation-delay: 0.28s; }
-    .bikes     { animation-delay: 0.32s; }
-    .div2      { animation-delay: 0.38s; }
-    .sl3       { animation-delay: 0.42s; }
-    .tabs-wrap { animation-delay: 0.46s; }
-    .tags      { animation-delay: 0.52s; }
-    .footer    { animation-delay: 0.58s; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>.net bike</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f2f2f7;
+  --card:rgba(255,255,255,0.72);
+  --card-border:rgba(255,255,255,0.5);
+  --text:#1c1c1e;
+  --muted:#8e8e93;
+  --sep:rgba(60,60,67,0.12);
+  --black:#1c1c1e;
+  --orange:#ff6a00;
+  --purple:#7c3aed;
+  --accent:#007aff;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#000;
+    --card:rgba(28,28,30,0.8);
+    --card-border:rgba(255,255,255,0.08);
+    --text:#fff;
+    --muted:#8e8e93;
+    --sep:rgba(255,255,255,0.08);
+  }
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Sarabun',sans-serif;
+  font-weight:400;
+  min-height:100vh;
+  padding:0 0 60px;
+  font-size:15px;
+}
+.wallpaper{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;background:var(--bg);overflow:hidden;pointer-events:none;}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.28;}
+.b1{width:260px;height:260px;background:#5e5ce6;top:-60px;left:-80px;}
+.b2{width:200px;height:200px;background:#ff6a00;top:100px;right:-60px;}
+.b3{width:180px;height:180px;background:#30d158;bottom:200px;left:-50px;}
+.wrap{position:relative;z-index:1;max-width:390px;margin:0 auto;padding:0 16px;}
+.hdr{text-align:center;padding:56px 0 28px;}
+.avatar-ring{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#ff6a00,#7c3aed,#007aff);padding:2.5px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(20px);}
+.avatar-inner svg{width:34px;height:34px;fill:var(--text);}
+.name{font-size:22px;font-weight:700;letter-spacing:-0.4px;}
+.handle{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-top:3px;}
+.bio{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6;}
+.glass{background:var(--card);border:0.5px solid var(--card-border);border-radius:20px;backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);overflow:hidden;}
+.sec-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:0 4px;margin:24px 0 8px;}
+.tabs-glass{background:rgba(118,118,128,0.12);border-radius:12px;padding:3px;display:flex;margin-bottom:12px;}
+.tab-btn{
+  flex:1;border:none;background:transparent;border-radius:10px;
+  padding:7px 2px;
+  font-family:'Sarabun',sans-serif;font-weight:600;font-size:12px;
+  color:var(--muted);cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;
+}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.tab-btn[data-tab="blackorange"] .dot{background:#1c1c1e;}
+.tab-btn[data-tab="black"] .dot{background:#1c1c1e;}
+.tab-btn[data-tab="purple"] .dot{background:#7c3aed;}
+.tab-btn[data-tab="general"] .dot{background:#8e8e93;}
+.tab-btn.active{box-shadow:0 1px 4px rgba(0,0,0,0.14);}
+@media(prefers-color-scheme:dark){.tab-btn.active{color:#fff;}}
+.tab-btn.active[data-tab="blackorange"]{background:#1c1c1e;color:#fff;}
+.tab-btn.active[data-tab="black"]{background:#1c1c1e;color:#fff;}
+.tab-btn.active[data-tab="purple"]{background:#7c3aed;color:#fff;}
+.tab-btn.active[data-tab="general"]{background:#3a3a3c;color:#fff;}
+.tab-btn.active .dot{opacity:0.45;}
+.tab-panel{display:none;flex-direction:column;}
+.tab-panel.active{display:flex;}
+.aff-row{display:flex;align-items:center;gap:12px;padding:12px 16px;text-decoration:none;color:var(--text);transition:background 0.15s;position:relative;}
+.aff-row:active{background:rgba(0,0,0,0.04);}
+.aff-row+.aff-row::before{content:'';position:absolute;top:0;left:60px;right:0;height:0.5px;background:var(--sep);}
+.aff-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.bi{background:#1c1c1e;}
+.oi{background:#ff6a00;}
+.pi{background:#7c3aed;}
+.gi{background:#3a3a3c;}
+.sold-bg{background:#aeaeb2;}
+.aff-info{flex:1;min-width:0;}
+.aff-title{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.aff-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.aff-badge{font-family:'DM Mono',monospace;font-size:10px;background:#ff3b30;color:#fff;padding:2px 7px;border-radius:6px;flex-shrink:0;}
+.arr{color:var(--muted);font-size:13px;flex-shrink:0;opacity:0.5;}
+.sold-row{opacity:0.35;pointer-events:none;}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0;}
+.tag{background:var(--card);border:0.5px solid var(--card-border);backdrop-filter:blur(20px);border-radius:100px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);padding:5px 12px;}
+.tag.solid{background:rgba(0,122,255,0.12);color:#007aff;border-color:rgba(0,122,255,0.18);}
+.footer{text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:28px;letter-spacing:0.06em;opacity:0.6;}
+</style>
 </head>
 <body>
-<div class="container">
+<div class="wallpaper"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="wrap">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="avatar">
+<div class="hdr">
+  <div class="avatar-ring">
+    <div class="avatar-inner">
       <svg viewBox="0 0 24 24"><path d="M5 20.5A3.5 3.5 0 1 1 5 13.5a3.5 3.5 0 0 1 0 7zm0-1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM19 20.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zm0-1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM12 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-1.5 1.5L9 12l3 2 3-2-1.5-4.5h-3zM9 12l-4 5h14l-4-5"/></svg>
     </div>
-    <div class="name">.net bike <span>@.net bike</span></div>
-    <div class="bio">รีวิวจักรยาน · อุปกรณ์ · เส้นทาง<br/>ลิงก์อะไหล่ที่ผมใช้จริง 🚲</div>
+  </div>
+  <div class="name">.net bike</div>
+  <div class="handle">@.net_bike</div>
+  <div class="bio">รีวิวจักรยาน · อุปกรณ์ · เส้นทาง<br>ลิงก์อะไหล่ที่ผมใช้จริง 🚲</div>
+</div>
+
+<div class="sec-label">อะไหล่แนะนำ (Shopee)</div>
+
+<div class="tabs-glass">
+  <button class="tab-btn active" data-tab="blackorange"><span class="dot"></span>ดำ+ส้ม</button>
+  <button class="tab-btn" data-tab="black"><span class="dot"></span>ดำ</button>
+  <button class="tab-btn" data-tab="purple"><span class="dot"></span>ม่วง</button>
+  <button class="tab-btn" data-tab="general"><span class="dot"></span>ทั่วไป</button>
+</div>
+
+<div class="glass">
+  <!-- Panel ดำ+ส้ม -->
+  <div class="tab-panel active" data-panel="blackorange">
+    <a href="https://s.shopee.co.th/8ASQcsJDlL" target="_blank" class="aff-row"><div class="aff-icon bi">🖐️</div><div class="aff-info"><div class="aff-title">Hand</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7ppaEiuGni" target="_blank" class="aff-row"><div class="aff-icon bi">🔩</div><div class="aff-info"><div class="aff-title">แปลงคอจุ่ม</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/6L0mS4J0OA" target="_blank" class="aff-row"><div class="aff-icon bi">⚙️</div><div class="aff-info"><div class="aff-title">สเต็ม</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/9UxoEXz3BR" target="_blank" class="aff-row"><div class="aff-icon bi">🔘</div><div class="aff-info"><div class="aff-title">ดุมล้อ</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/3LNAsssvtP" target="_blank" class="aff-row"><div class="aff-icon bi">⭕</div><div class="aff-info"><div class="aff-title">ขาจานหน้า</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7KtJf4uROd" target="_blank" class="aff-row"><div class="aff-icon bi">🎛️</div><div class="aff-info"><div class="aff-title">มือเกียร์</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/60Nw4i2Rl2" target="_blank" class="aff-row"><div class="aff-icon bi">🔧</div><div class="aff-info"><div class="aff-title">เฟือง</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/6VKCff9UtI" target="_blank" class="aff-row"><div class="aff-icon bi">🔗</div><div class="aff-info"><div class="aff-title">ตีนผี</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7fWA3rP5Pz" target="_blank" class="aff-row"><div class="aff-icon oi">📦</div><div class="aff-info"><div class="aff-title">เซ็ต เฟือง+ตีนผี+มือเกียร์</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/2LUdhhoyda" target="_blank" class="aff-row"><div class="aff-icon bi">🧺</div><div class="aff-info"><div class="aff-title">ตะกร้า+ตะแกรง</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/2Vo3tPO6sa" target="_blank" class="aff-row"><div class="aff-icon bi">⬛</div><div class="aff-info"><div class="aff-title">ยางนอก</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/60Nw43XeRm" target="_blank" class="aff-row"><div class="aff-icon bi">⚪</div><div class="aff-info"><div class="aff-title">ยางใน</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7ppaEXZca1" target="_blank" class="aff-row"><div class="aff-icon bi">💡</div><div class="aff-info"><div class="aff-title">ไฟหน้า</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/901Xcn0mkJ" target="_blank" class="aff-row"><div class="aff-icon bi">🔴</div><div class="aff-info"><div class="aff-title">ไฟท้าย</div><div class="aff-sub">คันดำ+ส้ม</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
   </div>
 
- 
-  <div class="divider div1"></div>
-
-
-      <svg class="bike-svg" viewBox="0 0 24 24"><path d="M5 20.5A3.5 3.5 0 1 1 5 13.5a3.5 3.5 0 0 1 0 7zm0-1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM19 20.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zm0-1.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM12 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm-1.5 1.5L9 12l3 2 3-2-1.5-4.5h-3zM9 12l-4 5h14l-4-5"/></svg>
-    </div>
+  <!-- Panel คันดำ -->
+  <div class="tab-panel" data-panel="black">
+    <a href="https://s.shopee.co.th/50VOtMhyYu" target="_blank" class="aff-row"><div class="aff-icon bi">🖐️</div><div class="aff-info"><div class="aff-title">Hand</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/8pi7SSNlrl" target="_blank" class="aff-row"><div class="aff-icon bi">🔩</div><div class="aff-info"><div class="aff-title">คอจุ่ม</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/9UxoEXz3BR" target="_blank" class="aff-row"><div class="aff-icon bi">🔘</div><div class="aff-info"><div class="aff-title">ดุมล้อ</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/3LNAsssvtP" target="_blank" class="aff-row"><div class="aff-icon bi">⭕</div><div class="aff-info"><div class="aff-title">ขาจานหน้า</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/60Nw4i2Rl2" target="_blank" class="aff-row"><div class="aff-icon bi">🔧</div><div class="aff-info"><div class="aff-title">เฟือง</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/6VKCff9UtI" target="_blank" class="aff-row"><div class="aff-icon bi">🔗</div><div class="aff-info"><div class="aff-title">ตีนผี</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7KtJf4uROd" target="_blank" class="aff-row"><div class="aff-icon bi">🎛️</div><div class="aff-info"><div class="aff-title">มือเกียร์</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7fWA3rP5Pz" target="_blank" class="aff-row"><div class="aff-icon oi">📦</div><div class="aff-info"><div class="aff-title">เซ็ต เฟือง+ตีนผี+มือเกียร์</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/8ASQdgRxuZ" target="_blank" class="aff-row"><div class="aff-icon bi">🦵</div><div class="aff-info"><div class="aff-title">ขาตั้ง</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/6VKCepxmvd" target="_blank" class="aff-row"><div class="aff-icon bi">🔒</div><div class="aff-info"><div class="aff-title">ล็อคหลักอาน</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/9KeO3GEWLz" target="_blank" class="aff-row"><div class="aff-icon bi">⬛</div><div class="aff-info"><div class="aff-title">ยางนอก</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/60Nw43XeRm" target="_blank" class="aff-row"><div class="aff-icon bi">⚪</div><div class="aff-info"><div class="aff-title">ยางใน</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7ppaEXZca1" target="_blank" class="aff-row"><div class="aff-icon bi">💡</div><div class="aff-info"><div class="aff-title">ไฟหน้า</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/901Xcn0mkJ" target="_blank" class="aff-row"><div class="aff-icon bi">🔴</div><div class="aff-info"><div class="aff-title">ไฟท้าย</div><div class="aff-sub">คันดำ</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <div class="aff-row sold-row"><div class="aff-icon sold-bg">🚫</div><div class="aff-info"><div class="aff-title">ตะแกรง</div><div class="aff-sub">สินค้าหมดชั่วคราว</div></div></div>
   </div>
 
-  <div class="divider div2"></div>
-
-  <!-- Affiliate -->
-  <div class="section-label sl3">อะไหล่แนะนำ (Shopee)</div>
-
-  <div class="tabs-wrap">
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="black"><span class="dot"></span>ดำ+ส้ม</button>
-      <button class="tab-btn" data-tab="orange"><span class="dot"></span>ดำ</button>
-      <button class="tab-btn" data-tab="purple"><span class="dot"></span>ม่วง</button>
-      <button class="tab-btn" data-tab="general"><span class="dot"></span>ทั่วไป</button>
-    </div>
-  </div>
-
-  <!-- Panel: ดำ+ส้ม -->
-  <div class="tab-panel active" data-panel="black">
-    <a href="https://s.shopee.co.th/8ASQcsJDlL" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🖐️</div><div class="aff-info"><div class="aff-title">Hand</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7ppaEiuGni" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔩</div><div class="aff-info"><div class="aff-title">แปลงคอจุ่ม</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/6L0mS4J0OA" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">⚙️</div><div class="aff-info"><div class="aff-title">สเต็ม</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/9UxoEXz3BR" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔘</div><div class="aff-info"><div class="aff-title">ดุมล้อ</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/3LNAsssvtP" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">⭕</div><div class="aff-info"><div class="aff-title">ขาจานหน้า</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7KtJf4uROd" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🎛️</div><div class="aff-info"><div class="aff-title">มือเกียร์</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/60Nw4i2Rl2" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔧</div><div class="aff-info"><div class="aff-title">เฟือง</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/6VKCff9UtI" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔗</div><div class="aff-info"><div class="aff-title">ตีนผี</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7fWA3rP5Pz" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon oi">📦</div><div class="aff-info"><div class="aff-title">เซ็ต เฟือง+ตีนผี+มือเกียร์</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/2LUdhhoyda" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🧺</div><div class="aff-info"><div class="aff-title">ตะกร้า+ตะแกรง</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/2Vo3tPO6sa" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">⬛</div><div class="aff-info"><div class="aff-title">ยางนอก</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/60Nw43XeRm" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">⚪</div><div class="aff-info"><div class="aff-title">ยางใน</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7ppaEXZca1" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">💡</div><div class="aff-info"><div class="aff-title">ไฟหน้า</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/901Xcn0mkJ" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔴</div><div class="aff-info"><div class="aff-title">ไฟท้าย</div><div class="aff-sub">คันดำ+ส้ม · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-  </div>
-
-  <!-- Panel: คันดำ -->
-  <div class="tab-panel" data-panel="orange">
-    <a href="https://s.shopee.co.th/50VOtMhyYu" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🖐️</div><div class="aff-info"><div class="aff-title">Hand</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/8pi7SSNlrl" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔩</div><div class="aff-info"><div class="aff-title">คอจุ่ม</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/9UxoEXz3BR" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔘</div><div class="aff-info"><div class="aff-title">ดุมล้อ</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/3LNAsssvtP" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">⭕</div><div class="aff-info"><div class="aff-title">ขาจานหน้า</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/60Nw4i2Rl2" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔧</div><div class="aff-info"><div class="aff-title">เฟือง</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/6VKCff9UtI" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔗</div><div class="aff-info"><div class="aff-title">ตีนผี</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7KtJf4uROd" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🎛️</div><div class="aff-info"><div class="aff-title">มือเกียร์</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7fWA3rP5Pz" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon oi">📦</div><div class="aff-info"><div class="aff-title">เซ็ต เฟือง+ตีนผี+มือเกียร์</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/8ASQdgRxuZ" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🦵</div><div class="aff-info"><div class="aff-title">ขาตั้ง</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/6VKCepxmvd" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔒</div><div class="aff-info"><div class="aff-title">ล็อคหลักอาน</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/9KeO3GEWLz" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">⬛</div><div class="aff-info"><div class="aff-title">ยางนอก</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/60Nw43XeRm" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">⚪</div><div class="aff-info"><div class="aff-title">ยางใน</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7ppaEXZca1" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">💡</div><div class="aff-info"><div class="aff-title">ไฟหน้า</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/901Xcn0mkJ" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon bi">🔴</div><div class="aff-info"><div class="aff-title">ไฟท้าย</div><div class="aff-sub">คันดำ · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <div class="aff-card sold-out"><div class="aff-icon sold">🚫</div><div class="aff-info"><div class="aff-title">ตะแกรง</div><div class="aff-sub">สินค้าหมดชั่วคราว</div></div></div>
-  </div>
-
-  <!-- Panel: คันม่วง -->
+  <!-- Panel คันม่วง -->
   <div class="tab-panel" data-panel="purple">
-    <a href="https://s.shopee.co.th/7fWA2JCJ2i" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">🔔</div><div class="aff-info"><div class="aff-title">กระดิ่ง</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/2BBDVsvEIr" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">🪑</div><div class="aff-info"><div class="aff-title">เบาะ</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/2LUdhhoyda" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">🧺</div><div class="aff-info"><div class="aff-title">ตะกร้า+ตะแกรง</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/60Nw43XeRm" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">⚪</div><div class="aff-info"><div class="aff-title">ยางใน</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7KtJf4uROd" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">🎛️</div><div class="aff-info"><div class="aff-title">มือเกียร์</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/60Nw4i2Rl2" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">🔧</div><div class="aff-info"><div class="aff-title">เฟือง</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/6VKCff9UtI" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">🔗</div><div class="aff-info"><div class="aff-title">ตีนผี</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7fWA3rP5Pz" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon oi">📦</div><div class="aff-info"><div class="aff-title">เซ็ต เฟือง+ตีนผี+มือเกียร์</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/7ppaEXZca1" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">💡</div><div class="aff-info"><div class="aff-title">ไฟหน้า</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/901Xcn0mkJ" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon pi">🔴</div><div class="aff-info"><div class="aff-title">ไฟท้าย</div><div class="aff-sub">คันม่วง · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
+    <a href="https://s.shopee.co.th/7fWA2JCJ2i" target="_blank" class="aff-row"><div class="aff-icon pi">🔔</div><div class="aff-info"><div class="aff-title">กระดิ่ง</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/2BBDVsvEIr" target="_blank" class="aff-row"><div class="aff-icon pi">🪑</div><div class="aff-info"><div class="aff-title">เบาะ</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/2LUdhhoyda" target="_blank" class="aff-row"><div class="aff-icon pi">🧺</div><div class="aff-info"><div class="aff-title">ตะกร้า+ตะแกรง</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/60Nw43XeRm" target="_blank" class="aff-row"><div class="aff-icon pi">⚪</div><div class="aff-info"><div class="aff-title">ยางใน</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7KtJf4uROd" target="_blank" class="aff-row"><div class="aff-icon pi">🎛️</div><div class="aff-info"><div class="aff-title">มือเกียร์</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/60Nw4i2Rl2" target="_blank" class="aff-row"><div class="aff-icon pi">🔧</div><div class="aff-info"><div class="aff-title">เฟือง</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/6VKCff9UtI" target="_blank" class="aff-row"><div class="aff-icon pi">🔗</div><div class="aff-info"><div class="aff-title">ตีนผี</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7fWA3rP5Pz" target="_blank" class="aff-row"><div class="aff-icon oi">📦</div><div class="aff-info"><div class="aff-title">เซ็ต เฟือง+ตีนผี+มือเกียร์</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/7ppaEXZca1" target="_blank" class="aff-row"><div class="aff-icon pi">💡</div><div class="aff-info"><div class="aff-title">ไฟหน้า</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/901Xcn0mkJ" target="_blank" class="aff-row"><div class="aff-icon pi">🔴</div><div class="aff-info"><div class="aff-title">ไฟท้าย</div><div class="aff-sub">คันม่วง</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
   </div>
 
-  <!-- Panel: ทั่วไป -->
+  <!-- Panel ทั่วไป -->
   <div class="tab-panel" data-panel="general">
-    <a href="https://s.shopee.co.th/10zG7lb963" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon gi">⛑️</div><div class="aff-info"><div class="aff-title">หมวก</div><div class="aff-sub">อุปกรณ์ทั่วไป · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/8KlqrHIwFQ" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon gi">😷</div><div class="aff-info"><div class="aff-title">หน้ากากกันแดด</div><div class="aff-sub">อุปกรณ์ทั่วไป · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/3qJRV2bwWA" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon gi">🔒</div><div class="aff-info"><div class="aff-title">ที่ล็อค</div><div class="aff-sub">อุปกรณ์ทั่วไป · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
-    <a href="https://s.shopee.co.th/8V5H3dgFkf" target="_blank" rel="noopener" class="aff-card"><div class="aff-icon gi">🔋</div><div class="aff-info"><div class="aff-title">สูบลมไฟฟ้า</div><div class="aff-sub">อุปกรณ์ทั่วไป · Shopee</div></div><div class="aff-badge">Shopee</div><div class="aff-arrow">↗</div></a>
+    <a href="https://s.shopee.co.th/10zG7lb963" target="_blank" class="aff-row"><div class="aff-icon gi">⛑️</div><div class="aff-info"><div class="aff-title">หมวก</div><div class="aff-sub">อุปกรณ์ทั่วไป</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/8KlqrHIwFQ" target="_blank" class="aff-row"><div class="aff-icon gi">😷</div><div class="aff-info"><div class="aff-title">หน้ากากกันแดด</div><div class="aff-sub">อุปกรณ์ทั่วไป</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/3qJRV2bwWA" target="_blank" class="aff-row"><div class="aff-icon gi">🔒</div><div class="aff-info"><div class="aff-title">ที่ล็อค</div><div class="aff-sub">อุปกรณ์ทั่วไป</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
+    <a href="https://s.shopee.co.th/8V5H3dgFkf" target="_blank" class="aff-row"><div class="aff-icon gi">🔋</div><div class="aff-info"><div class="aff-title">สูบลมไฟฟ้า</div><div class="aff-sub">อุปกรณ์ทั่วไป</div></div><div class="aff-badge">Shopee</div><div class="arr">›</div></a>
   </div>
+</div>
 
-  <!-- Tags -->
-  <div class="tags">
-    <span class="tag">#จักรยาน</span>
-    <span class="tag">#cycling</span>
-    <span class="tag">#อะไหล่จักรยาน</span>
-    <span class="tag outline">#รีวิว</span>
-    <span class="tag outline">#ปั่นจักรยาน</span>
-  </div>
+<div class="tags">
+  <span class="tag solid">#จักรยาน</span>
+  <span class="tag solid">#cycling</span>
+  <span class="tag solid">#อะไหล่จักรยาน</span>
+  <span class="tag">#รีวิว</span>
+  <span class="tag">#ปั่นจักรยาน</span>
+</div>
 
-  <div class="footer">LINKS MAY BE AFFILIATE · ขอบคุณที่สนับสนุน 🙏</div>
-
+<div class="footer">LINKS MAY BE AFFILIATE · ขอบคุณที่สนับสนุน 🙏</div>
 </div>
 
 <script>
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelector(`[data-panel="${target}"]`).classList.add('active');
-    });
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const t=btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelector(`[data-panel="${t}"]`).classList.add('active');
   });
+});
 </script>
 </body>
 </html>
